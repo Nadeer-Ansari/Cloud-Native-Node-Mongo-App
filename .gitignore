@@ -1,0 +1,105 @@
+# ========================================
+# Node.js & Express Project
+# ========================================
+
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files (sensitive info)
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+*.out
+*.err
+npm-debug.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build & cache
+dist/
+build/
+.cache/
+.tmp/
+coverage/
+
+# ========================================
+# Docker Related
+# ========================================
+
+# Docker artifacts
+*.pid
+*.seed
+*.pid.lock
+
+# Ignore Docker build files if needed
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Local volumes or database mounts
+mongodb_data/
+mongo_data/
+volumes/
+data/
+
+# ========================================
+# AWS & Cloud
+# ========================================
+
+# AWS credentials and configs
+.aws/
+*.pem
+*.key
+*.crt
+*.pub
+credentials
+config
+
+# ECR or deployment related files
+.ecr/
+.aws-sam/
+.aws-cloudformation/
+*.zip
+
+# ========================================
+# VS Code / JetBrains
+# ========================================
+
+.vscode/
+.idea/
+*.swp
+
+# ========================================
+# Miscellaneous
+# ========================================
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Backup files
+*~
+*.orig
+
+# ========================================
+# Project-specific
+# ========================================
+
+# Ignore uploaded screenshots (optional)
+screenshots/
+!screenshots/project-banner.jpg
+
+# Ignore local environment test files
+test/
+tests/
+__tests__/

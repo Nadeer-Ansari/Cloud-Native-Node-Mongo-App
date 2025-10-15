@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f8fa;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    header {
+      background: #3498db;
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    
+    .db-info {
+      background: #2c3e50;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+    
+    .db-info a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    
+    .profile-content {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .profile-image {
+      margin-bottom: 25px;
+    }
+    
+    .profile-image img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid #ecf0f1;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .profile-info {
+      width: 100%;
+      margin-bottom: 25px;
+    }
+    
+    .info-item {
+      display: flex;
+      padding: 15px;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      font-weight: bold;
+      min-width: 80px;
+      color: #2c3e50;
+    }
+    
+    .info-value {
+      flex: 1;
+    }
+    
+    .loading {
+      color: #7f8c8d;
+      font-style: italic;
+    }
+    
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 5px;
+    }
+    
+    .btn-primary {
+      background: #3498db;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #2980b9;
+    }
+    
+    .btn-success {
+      background: #27ae60;
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: #219653;
+    }
+    
+    .edit-form {
+      width: 100%;
+      display: none;
+      background: #f9f9f9;
+      padding: 25px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    
+    .form-title {
+      margin-bottom: 20px;
+      color: #2c3e50;
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    
+    .success-message {
+      display: none;
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    
+    .button-group {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .error-message {
+      display: none;
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>User Profile</h1>
+    </header>
+    
+    <div class="db-info">
+      MongoDB Connected: <strong>user-account</strong> database |
+      View in <a href="http://localhost:8081" target="_blank">MongoExpress</a>
+    </div>
+    
+    <div class="profile-content">
+      <div class="profile-image">
+        <img src="https://st3.depositphotos.com/15648834/17930/v/450/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" alt="Profile Image">
+      </div>
+      
+      <div class="profile-info">
+        <div class="info-item">
+          <span class="info-label">Name:</span>
+          <span class="info-value" id="name"><span class="loading">Loading...</span></span>
+        </div>
+        
+        <div class="info-item">
+          <span class="info-label">Email:</span>
+          <span class="info-value" id="email"><span class="loading">Loading...</span></span>
+        </div>
+        
+        <div class="info-item">
+          <span class="info-label">Bio:</span>
+          <span class="info-value" id="bio"><span class="loading">Loading...</span></span>
+        </div>
+      </div>
+      
+      <div class="success-message" id="successMessage">
+        Profile updated successfully!<br>
+        <small>Check MongoExpress at <a href="http://localhost:8081" target="_blank">localhost:8081</a> to see your data</small>
+      </div>
+      
+      <div class="error-message" id="errorMessage">
+        Error updating profile. Please check console for details.
+      </div>
+      
+      <button id="editBtn" class="btn btn-primary">Edit Profile</button>
+      
+      <div class="edit-form" id="editForm">
+        <h2 class="form-title">Edit Profile</h2>
+        
+        <div class="form-group">
+          <label for="newName">Name</label>
+          <input type="text" id="newName" placeholder="Enter your name">
+        </div>
+        
+        <div class="form-group">
+          <label for="newEmail">Email</label>
+          <input type="email" id="newEmail" placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+          <label for="newBio">Bio</label>
+          <input type="text" id="newBio" placeholder="Tell us about yourself">
+        </div>
+        
+        <div class="button-group">
+          <button type="button" id="cancelBtn" class="btn">Cancel</button>
+          <button type="button" id="saveBtn" class="btn btn-success">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM elements
+    const editBtn = document.getElementById("editBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const form = document.getElementById("editForm");
+    const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
+    
+    // Function to load profile data from server
+    async function loadProfileData() {
+      try {
+        const response = await fetch("/api/profile");
+        if (!response.ok) {
+          throw new Error('Failed to fetch profile');
+        }
+        
+        const user = await response.json();
+        
+        document.getElementById('name').textContent = user.name;
+        document.getElementById('email').textContent = user.email;
+        document.getElementById('bio').textContent = user.bio;
+        
+        // Remove loading class
+        document.getElementById('name').classList.remove('loading');
+        document.getElementById('email').classList.remove('loading');
+        document.getElementById('bio').classList.remove('loading');
+        
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        document.getElementById('name').textContent = 'Error loading data';
+        document.getElementById('email').textContent = 'Error loading data';
+        document.getElementById('bio').textContent = 'Error loading data';
+      }
+    }
+    
+    // Function to show success message
+    function showSuccessMessage() {
+      successMessage.style.display = 'block';
+      errorMessage.style.display = 'none';
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Function to show error message
+    function showErrorMessage() {
+      errorMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Event listener for edit button
+    editBtn.addEventListener("click", () => {
+      // Pre-fill the form with current values
+      document.getElementById("newName").value = document.getElementById("name").textContent;
+      document.getElementById("newEmail").value = document.getElementById("email").textContent;
+      document.getElementById("newBio").value = document.getElementById("bio").textContent;
+      
+      // Show the form and hide the edit button
+      form.style.display = "block";
+      editBtn.style.display = "none";
+    });
+    
+    // Event listener for cancel button
+    cancelBtn.addEventListener("click", () => {
+      // Hide the form and show the edit button
+      form.style.display = "none";
+      editBtn.style.display = "block";
+      errorMessage.style.display = "none";
+    });
+    
+    // Event listener for save button
+    saveBtn.addEventListener("click", async () => {
+      const updatedUser = {
+        name: document.getElementById("newName").value,
+        email: document.getElementById("newEmail").value,
+        bio: document.getElementById("newBio").value
+      };
+      
+      // Basic validation
+      if (!updatedUser.name || !updatedUser.email) {
+        alert('Name and email are required!');
+        return;
+      }
+      
+      try {
+        // Send update to server
+        const response = await fetch("/api/update-profile", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(updatedUser)
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to update profile');
+        }
+        
+        const result = await response.json();
+        
+        // Update the UI with new values
+        document.getElementById("name").textContent = result.user.name;
+        document.getElementById("email").textContent = result.user.email;
+        document.getElementById("bio").textContent = result.user.bio;
+        
+        // Hide the form and show the edit button again
+        form.style.display = "none";
+        editBtn.style.display = "block";
+        
+        // Show success message
+        showSuccessMessage();
+        
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        showErrorMessage();
+      }
+    });
+    
+    // Load profile data when page loads
+    document.addEventListener('DOMContentLoaded', loadProfileData);
+  </script>
+</body>
+</html>
